@@ -1,0 +1,14 @@
+node_modules/
+dist/
+coverage/
+.idea/
+.vscode/
+playwright-report/
+allure-report/
+allure-results/
+storage/
+
+# local env
+.env
+.env.local
+.env.*.local

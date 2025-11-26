@@ -3,10 +3,9 @@ import { LoginPage } from '../pages/LoginPage';
 import {InventoryPage} from "../pages/InventoryPage";
 import { getCreds } from '../utils/credentials';
 
-const { user, pass } = getCreds();
-
 
 test('should login successfully', { tag: '@smoke' }, async ({ page }) => {
+  const { user, pass } = getCreds();
   const loginPage = new LoginPage(page);
   
   await loginPage.goto();
@@ -21,6 +20,7 @@ test('should login successfully', { tag: '@smoke' }, async ({ page }) => {
 });
 
 test('should add item to cart and verify details', async ({ page }) => {
+  const { user, pass } = getCreds();
     const loginPage = new LoginPage(page);
     const inventoryPage = new InventoryPage(page);
 
