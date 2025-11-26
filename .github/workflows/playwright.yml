@@ -1,0 +1,66 @@
+name: Playwright
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Run Playwright tests (Allure + HTML)
+        env:
+          SAUCE_USER: ${{ secrets.SAUCE_USER }}
+          SAUCE_PASS: ${{ secrets.SAUCE_PASS }}
+        run: npm run test:allure
+
+      - name: Generate Allure report
+        if: always()
+        run: |
+          if [ -d allure-results ]; then
+            npx allure generate allure-results --clean -o allure-report
+          else
+            echo "No allure-results directory; skipping report generation."
+          fi
+
+      - name: Upload Allure report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report
+          retention-days: 7
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results
+          retention-days: 7
+
+      - name: Upload Playwright HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-html-report
+          path: playwright-report
+          retention-days: 7
+

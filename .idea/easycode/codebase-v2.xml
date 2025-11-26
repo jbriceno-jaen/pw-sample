@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="com.obiscr.chatgpt.settings.EasyCodeState">
+    <option name="projectFiles" value="$PROJECT_DIR$/pages/CheckoutPage.ts;C:/Users/jafeth.briceno/WebstormProjects/playwright-Example/pages/InventoryPage.ts;C:/Users/jafeth.briceno/WebstormProjects/playwright-Example/pages/LoginPage.ts;C:/Users/jafeth.briceno/WebstormProjects/playwright-Example/playwright-report/index.html;C:/Users/jafeth.briceno/WebstormProjects/playwright-Example/storage/auth.json;C:/Users/jafeth.briceno/WebstormProjects/playwright-Example/test-results/.last-run.json;C:/Users/jafeth.briceno/WebstormProjects/playwright-Example/utils/credentials.ts;C:/Users/jafeth.briceno/WebstormProjects/playwright-Example/global-setup.ts;C:/Users/jafeth.briceno/WebstormProjects/playwright-Example/package-lock.json;C:/Users/jafeth.briceno/WebstormProjects/playwright-Example/package.json;C:/Users/jafeth.briceno/WebstormProjects/playwright-Example/playwright.config.ts;C:/Users/jafeth.briceno/WebstormProjects/playwright-Example/tsconfig.json" />
+  </component>
+</project>
