@@ -127,11 +127,3 @@ CI uploads raw `allure-results` and the generated HTML `allure-report` as artifa
 - Add test routing / labels to spread slow tests evenly across shards.
 
 ---
-
-If you'd like I can:
-
-- add pre-commit hooks (husky + lint-staged)
-- increase the number of shards per browser (e.g., 4 shards)
-- implement CI step to aggregate Allure results across shards and browsers
-
-Feel free to tell me which of the above you want next and I'll implement it.
