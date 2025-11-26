@@ -5,20 +5,35 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  workers: process.env.CI ? 2 : undefined, // adjust if needed
+
+  // Logs in once using SAUCE_USER/SAUCE_PASS and writes storage/auth.json
   globalSetup: './global-setup',
+
   reporter: [
-    ['html'],                          // existing HTML report
+    ['html'],
     ['allure-playwright', { outputFolder: 'allure-results' }],
   ],
+
   use: {
     baseURL: 'https://www.saucedemo.com',
     storageState: 'storage/auth.json',
     trace: 'on-first-retry',
-    screenshot: 'only-on-failure',     // good for Allure attachments
-    video: 'retain-on-failure',        // optional; also goes to Allure
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
   },
+
   projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    // Uncomment to add WebKit:
+    // { name: 'webkit', use: { ...devices['Desktop Safari'] } },
   ],
 });
+
