@@ -5,31 +5,32 @@ on:
     branches: [main]
   pull_request:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
-
 jobs:
   test:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: npm
-      - run: npm ci
-      - run: npx playwright install --with-deps
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
       - name: Run Playwright tests (Allure + HTML)
         env:
           SAUCE_USER: ${{ secrets.SAUCE_USER }}
           SAUCE_PASS: ${{ secrets.SAUCE_PASS }}
         run: npm run test:allure
+
       - name: Generate Allure report
         if: always()
         run: |
@@ -38,7 +39,8 @@ jobs:
           else
             echo "No allure-results directory; skipping report generation."
           fi
-      - name: Upload Allure report artifact
+
+      - name: Upload Allure report
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -46,20 +48,19 @@ jobs:
           path: allure-report
           retention-days: 7
 
-  deploy-report:
-    if: always()
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download Allure report
-        uses: actions/download-artifact@v4
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
-          name: allure-report
-          path: ./public              # Pages expects a folder
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+          name: allure-results
+          path: allure-results
+          retention-days: 7
+
+      - name: Upload Playwright HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
-          path: ./public
-      - name: Deploy to GitHub Pages
-        id: deploy
-        uses: actions/deploy-pages@v4
+          name: playwright-html-report
+          path: playwright-report
+          retention-days: 7
+
