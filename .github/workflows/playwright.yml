@@ -13,6 +13,9 @@ jobs:
       matrix:
         node-version: [18.x]
         browser: [chromium, firefox, webkit]
+        # Shard index to split tests across multiple jobs per browser.
+        # Use 2 shards by default — change array length to increase parallelism.
+        shard: [1, 2]
 
     steps:
       - name: Checkout
@@ -39,13 +42,14 @@ jobs:
           SAUCE_PASS: ${{ secrets.SAUCE_PASS }}
         run: |
           # Run tests for this browser using multiple workers to speed up execution.
-          npm test -- --project=${{ matrix.browser }} --workers=4 --reporter=list
+          # Use matrix.shard to split work across CI jobs: --shard=index/total
+          npm test -- --project=${{ matrix.browser }} --shard=${{ matrix.shard }}/2 --workers=2 --reporter=list
 
       - name: Upload Allure results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results-${{ matrix.browser }}
+          name: allure-results-${{ matrix.browser }}-shard-${{ matrix.shard }}
           path: allure-results
           retention-days: 7
 
@@ -62,7 +66,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: allure-report-${{ matrix.browser }}
+          name: allure-report-${{ matrix.browser }}-shard-${{ matrix.shard }}
           path: allure-report
           retention-days: 7
 
@@ -70,7 +74,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-html-report-${{ matrix.browser }}
+          name: playwright-html-report-${{ matrix.browser }}-shard-${{ matrix.shard }}
           path: playwright-report
           retention-days: 7
 
