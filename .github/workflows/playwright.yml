@@ -12,6 +12,7 @@ jobs:
     strategy:
       matrix:
         node-version: [18.x]
+        browser: [chromium, firefox, webkit]
 
     steps:
       - name: Checkout
@@ -36,13 +37,15 @@ jobs:
         env:
           SAUCE_USER: ${{ secrets.SAUCE_USER }}
           SAUCE_PASS: ${{ secrets.SAUCE_PASS }}
-        run: npm test -- --reporter=list
+        run: |
+          # Run tests for this browser using multiple workers to speed up execution.
+          npm test -- --project=${{ matrix.browser }} --workers=4 --reporter=list
 
       - name: Upload Allure results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results
+          name: allure-results-${{ matrix.browser }}
           path: allure-results
           retention-days: 7
 
@@ -59,7 +62,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: allure-report
+          name: allure-report-${{ matrix.browser }}
           path: allure-report
           retention-days: 7
 
@@ -67,7 +70,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-html-report
+          name: playwright-html-report-${{ matrix.browser }}
           path: playwright-report
           retention-days: 7
 

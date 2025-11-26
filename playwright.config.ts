@@ -32,8 +32,8 @@ export default defineConfig({
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
     },
-    // Uncomment to add WebKit:
-    // { name: 'webkit', use: { ...devices['Desktop Safari'] } },
+    // Also run WebKit (Desktop Safari)
+    { name: 'webkit', use: { ...devices['Desktop Safari'] } },
   ],
 });
 
