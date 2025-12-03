@@ -46,3 +46,15 @@ test('should add item to cart and verify details', async ({ page }) => {
     const isDescriptionVisible = await inventoryPage.isProductVisible('carry.allTheThings()');
     expect(isDescriptionVisible).toBeTruthy();
 });
+
+test('shows proper error for locked out user', async ({ page }) => {
+  const loginPage = new LoginPage(page);
+
+  await loginPage.goto();
+
+  // Use known locked-out user from Sauce Demo
+  await loginPage.login('locked_out_user', 'secret_sauce');
+
+  // The app displays an error message when the user is locked out
+  await expect(page.getByText(/locked out/i)).toBeVisible();
+});
